@@ -58,9 +58,9 @@ public:
 
 	// 右旋函数,返回旋转后的父结点
 	/*
-		    O
+		    O	<= node(将要旋转的点)
 		   /
-		  O   <= node
+		  O 
 		 /
 		O
 	*/
@@ -70,7 +70,6 @@ public:
 		Node* l_son = node->left;
 
 		// 不管是否会发生冲突，都把冲突的右孩变左孩
-		// ! 删除的时候会报错
 		node->left = l_son->right;
 		// 右孩变左孩后，更新父节点（前提它不是空节点）
 		if(node->left)
@@ -106,6 +105,8 @@ public:
 	Node* leftRotate(Node* node)
 	{
 		Node* r_son = node->right;
+		// 提前断掉右结点
+		node->right = r_son->left;
 		if(r_son->left)
 		{
 			node->right = r_son->left;
@@ -156,9 +157,9 @@ public:
 				if(uncle && uncle->color == Color::RED)
 				{
 					// 叔父爷变色
-					uncle->color == Color::BLACK;
-					father->color == Color::BLACK;
-					g_father->color == Color::RED;
+					uncle->color = Color::BLACK;
+					father->color = Color::BLACK;
+					g_father->color = Color::RED;
 					// 将当前指针指向爷结点
 					target = g_father;
 				}
@@ -177,10 +178,11 @@ public:
 					t->color = Color::BLACK;
 					t->right->color = Color::RED;
 					t->left->color = Color::RED;
+					return;
 				}
 			}
 
-			if(g_father && g_father->right = father)
+			if(g_father && g_father->right == father)
 			{
 				Node* uncle = g_father->left;
 				if(uncle && uncle->color == Color::RED)
@@ -195,6 +197,7 @@ public:
 					// RL
 					if(target == g_father->right->left)
 					{
+						// !不是旋转父结点
 						rightRotate(father);
 					}
 					// LL和RL后续都一样
@@ -202,6 +205,7 @@ public:
 					t->color = Color::BLACK;
 					t->left->color = Color::RED;
 					t->right->color = Color::RED;
+					return;
 				}
 			}
 			root->color = Color::BLACK;
@@ -210,47 +214,44 @@ public:
 
 	void insert(Value v)
 	{
-		Node* insertNode = new Node(v);
+		Node* node = new Node(v);
+		Node* p = nullptr;
 		Node* cur = root;
-		while(1)
-		{
-			if(cur->value < v)
-			{
-				if(cur->right)
-				{
-					cur = cur -> right;
-				}
-				else
-				{
-					cur -> right = insertNode;
-					insertNode->parent = cur;
-					size++;
-					return;
-				}
-				
-			}
-			else if(cur->value > v)
-			{
-				if(cur->left)
-				{
-					cur = cur->left;
-				}
-				else
-				{
-					cur->left = insertNode;
-					insertNode->parent = cur;
-					size++;
-					return;
-				}
 
+		while(cur)
+		{
+			p = cur;
+			if(v > cur->value)
+			{
+				cur = cur->right;
+			}
+			else if(v < cur->value)
+			{
+				cur = cur->left;
 			}
 			else
 			{
-				delete insertNode;
-				std::cout << "the tree has this value!" << std::endl;
-				return;
+				std::cout << "the value was in the tree" << std::endl;
+				delete node;
+        		return;
 			}
 		}
+		size++;
+		if(v > p->value)
+		{
+			p->right = node;
+		}
+		else
+		{
+			p->left = node;
+		}
+
+		node->parent = p;
+		if(!p)
+		{
+			root = node;
+		}
+		insertFixup(node);
 	}
 
 	  // 中序遍历

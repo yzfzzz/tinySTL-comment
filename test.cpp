@@ -84,18 +84,16 @@ void HashTableTest()
 void RedBlackTree()
 {
     mystl::RedBlackTree<int> rbt(17);
-    // ! 插入的时候有问题,应该是root结点的问题
-    rbt.insert(15);
-    rbt.insert(9);
     rbt.insert(18);
-    rbt.insert(10);
-    rbt.insert(25);
-    rbt.insert(37);
     rbt.insert(23);
     rbt.insert(34);
-    rbt.insert(6);
-    rbt.insert(13);
     rbt.insert(27);
+    rbt.insert(15);
+    rbt.insert(9);
+    rbt.insert(6);
+    rbt.insert(8);
+    rbt.insert(5);
+    rbt.insert(25);
     rbt.printTree();
 
     rbt.deleteNode(18);
