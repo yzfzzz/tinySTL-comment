@@ -4,6 +4,8 @@
 #include "HashTable.h"
 #include "RedBlackTree.h"
 
+// beta≤‚ ‘∞Ê
+
 void vectorTest()
 {
     mystl::Vector<int> v1;
