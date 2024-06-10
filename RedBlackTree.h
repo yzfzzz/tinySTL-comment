@@ -265,6 +265,148 @@ public:
 		}
 	}
 
+	// 辅助函数，用新的结点替代目标结点
+	void replaceNode(Node* targetNode, Node* newNode)
+	{
+		// 如果目标结点没有父结点，说明它是根结点
+		if(targetNode->parent == nullptr)
+		{
+			root = newNode;
+		}
+		// 目标结点是左子结点
+		else if(targetNode == targetNode->parent->left)
+		{
+			targetNode->parent->left = newNode;
+		}
+		// 目标结点是右子结点
+		else
+		{
+			targetNode->parent->right = newNode;
+		}
+
+		if(newNode)
+		{
+			newNode->parent = targetNode->parent;
+		}
+	}
+
+	// 删除后修复红黑树，保持红黑树的性质
+	void removeFixup(Node* node)
+	{
+		// 如果没有移到根结点，就一直循环
+		while(node != root)
+		{
+			// 结点是左子树
+			if(node == node->parent->left)
+			{
+				Node* sibling = node->parent->right;
+				// case1:兄弟结点是红色
+				if(getColor(sibling) == Color::RED)
+				{
+					// 兄父变色
+					setColor(sibling, Color::BLACK);
+					setColor(node->parent, Color::RED);
+					// 朝双黑方向旋转(双黑在哪就往哪转)
+					leftRotate(node->parent);
+					// 保持双黑继续调整
+					sibling = node->parent->right;
+				}
+				// case2:兄弟结点是黑色,且兄弟的孩子都是黑的
+				if(getColor(sibling->left) == Color::BLACK && getColor(sibling->right) == Color::BLACK)
+				{
+					// 兄弟变红
+					setColor(sibling, Color::RED);
+					// 双黑上移
+					node = node ->parent;
+					if(node->color == Color::RED)
+					{
+						// 上移是红，变单黑
+						node->color = Color::BLACK;
+						// 结束循环
+						node = root;
+					}
+				}
+				// 兄弟结点是黑色,兄弟至少有一个红孩子
+				else
+				{
+					// 兄弟结点右孩子是黑的，所以左孩子一定是红的
+					if(getColor(sibling->right) == Color::BLACK)
+					{
+						// RL类型
+						// ! 变色
+						setColor(sibling->left, Color::BLACK);
+            			setColor(sibling, Color::RED);
+						// 兄弟结点右旋
+						rightRotate(sibling);
+						// 旋转后更正兄弟结点
+						sibling = node->parent->right;
+					}
+					// RR类型
+					setColor(sibling->right, getColor(sibling));
+					setColor(sibling, getColor(node->parent));
+					setColor(node->parent, Color::BLACK);
+					// 左旋结点
+					leftRotate(node->parent);
+					node = root;
+				}
+			}
+			// 删除结点是右子树
+			else
+			{
+				Node* sibling = node->parent->left;
+				// case1:兄弟结点是红色
+				if(getColor(sibling) == Color::RED)
+				{
+					// 兄父变色
+					setColor(sibling, Color::BLACK);
+					setColor(node->parent, Color::RED);
+					// 朝双黑方向旋转(双黑在哪就往哪转)
+					rightRotate(node->parent);
+					// 保持双黑继续调整
+					sibling = node->parent->left;
+				}
+				// case2:兄弟结点是黑色,且兄弟的孩子都是黑的
+				if(getColor(sibling->left) == Color::BLACK && getColor(sibling->right) == Color::BLACK)
+				{
+					// 兄弟变红
+					setColor(sibling, Color::RED);
+					// 双黑上移
+					node = node ->parent;
+					if(node->color == Color::RED)
+					{
+						// 上移是红，变单黑
+						node->color = Color::BLACK;
+						// 结束循环
+						node = root;
+					}
+				}
+				// 兄弟结点是黑色,兄弟至少有一个红孩子
+				else
+				{
+					// 结点左孩子是黑的，所以右孩子一定是红的
+					if(getColor(sibling->left) == Color::BLACK)
+					{
+						// LR类型
+						// ! 变色
+						setColor(sibling->right, Color::BLACK);
+            			setColor(sibling, Color::RED);
+						// 兄弟结点左旋
+						leftRotate(sibling);
+						// 旋转后更正兄弟结点
+						sibling = node->parent->left;
+					}
+					// LL类型
+					setColor(sibling->left, getColor(sibling));
+					setColor(sibling, getColor(node->parent));
+					setColor(node->parent, Color::BLACK);
+					// 右旋结点
+					rightRotate(node->parent);
+					node = root;
+				}
+			}
+		}
+	}
+
 	// 删除指定结点
 	void deleteNode(Value v)
 	{
@@ -272,10 +414,9 @@ public:
 		deleteFixup(cur);
 	}
 
-	// 寻找以某个节点为根节点的右子树中的最小节点
+	// 寻找以某个节点为根节点的右子树中的最小节点, cur是删除结点的右子树
 	Node* findMinNode(Node* cur)
 	{
-		cur = cur->right;
 		while(cur->left)
 		{
 			cur = cur->left;
@@ -283,172 +424,24 @@ public:
 		return cur;
 	}
 
-	// 删除结点后，修复红黑树
-	void deleteFixup(Node* cur)
+	// 获取颜色，空指针为黑色
+	Color getColor(Node* node)
 	{
-		// 当前要删除的结点颜色变成双黑
-		Value v = cur->value;
-		cur->color = Color::DoubleBLACK;
-		while(cur->color == Color::DoubleBLACK)
-		{	
-			// 没有左右孩子
-			if(!cur->left && !cur->right)
-			{
-				cur->color = Color::DoubleBLACK;
-				// 当前结点为红
-				if(cur->color == Color::RED)
-				{
-					delete cur;
-					return;
-				}
-				// 当前结点为黑
-				else
-				{
-					// 找兄弟结点
-					Node* sibling;
-					Node* p = cur->parent;
-					if(p->left == cur)
-					{
-						sibling = p->right;
-					}
-					else
-					{
-						sibling = p->left;
-					}
-					if(sibling)
-					{
-						// 如果结点存在，且是黑色的
-						if(sibling->color == Color::BLACK)
-						{
-							// 兄弟至少有一个红孩子
-							if( (sibling->left && sibling->left->color == Color::RED) || (sibling->right && sibling->right->color == Color::RED))
-							{
-								// LL
-								if(sibling == p->left && sibling->left)
-								{
-									Node* r = sibling->left;
-									r->color = sibling->color;
-									sibling->color = p->color;
-									p->color = Color::BLACK;
-									rightRotate(sibling);
-									p->right = nullptr;
-									delete cur;
-									return;
-								}
-								// RR
-								else if(sibling->right && sibling == p->right)
-								{
-									Node* r = sibling->right;
-									r->color = sibling->color;
-									sibling->color = p->color;
-									p->color = Color::BLACK;
-									leftRotate(sibling);
-									p->left = nullptr;
-									delete cur;
-									return;
-								}
-								// LR
-								else if(sibling == p->left && !sibling->left && sibling->right)
-								{
-									Node* r = sibling->right;
-									r->color = p->color;
-									p->color = Color::BLACK;
-									leftRotate(r);
-									rightRotate(p->left);
-									p->right = nullptr;
-									delete cur;
-									return;
-								}
-								// RL
-								else
-								{
-									Node* r = sibling->left;
-									r->color = p->color;
-									p->color = Color::BLACK;
-									rightRotate(r);
-									leftRotate(p->right);
-									p->left = nullptr;
-									delete cur;
-									return;
-								}
-							}
-							// 兄弟孩子都是黑的
-							else
-							{
-								sibling->color = Color::RED;
-								if(p->left == cur)
-									p->left = nullptr;
-								if(p->right == cur)
-									p->right = nullptr;
-								// 删除这个值所在的结点
-								if(cur->value == v)
-								{
-									Node* temp = cur;
-									cur = p;
-									delete temp;
-								}
-								if(cur == root || cur->color == Color::RED)
-								{
-									cur->color = Color::BLACK;
-									return;
-								}
-								else
-								{
-									cur->color = Color::DoubleBLACK;
-								}
-							}
-						}
-						// 兄弟结点是红色的
-						else
-						{
-							sibling->color = Color::BLACK;
-							p->color = Color::RED;
-							if(cur->parent->left == cur)
-							{
-								leftRotate(sibling);
-							}
-							else
-							{
-								rightRotate(sibling);
-							}
-						}
-					}
-					
-				}	
-			}
-			// 有左右子树
-			else
-			{
-				// 有左右子树
-				if(cur->left && cur->right)
-				{
-					Node* minNode = findMinNode(cur);
-					cur->value = minNode->value;
-					cur->color = Color::BLACK;
-					cur = minNode;
-					cur->color = Color::DoubleBLACK;
-				}
-				else
-				{
-					// 只有左子树
-					if(cur->left)
-					{
-						cur->value = cur->left->value;
-						cur->color = Color::BLACK;
-						delete cur->left;
-						cur->left = nullptr;
-					}
-					// 只有右子树
-					else
-					{
-						cur->value = cur->right->value;
-						cur->color = Color::BLACK;
-						delete cur->right;
-						cur->right = nullptr;
-					}
-				}
-			}
+		if(node == nullptr)
+		{
+			return Color::BLACK;
 		}
+		return node->color;
+	}
+
+	// 获取颜色，空指针为黑色
+	void setColor(Node* node, Color color)
+	{
+		if(node == nullptr)
+		{
+			return;
+		}
+		node->color = color;
 	}
 
 	int getSize()

@@ -83,22 +83,25 @@ void HashTableTest()
 
 void RedBlackTree()
 {
-    mystl::RedBlackTree<int> rbt(17);
+    mystl::RedBlackTree<int> rbt(15);
+    rbt.insert(9);
     rbt.insert(18);
+    rbt.insert(6);
+    rbt.insert(13);
+    rbt.insert(17);
+    rbt.insert(27);
+    rbt.insert(10);
     rbt.insert(23);
     rbt.insert(34);
-    rbt.insert(27);
-    rbt.insert(15);
-    rbt.insert(9);
-    rbt.insert(6);
-    rbt.insert(8);
-    rbt.insert(5);
     rbt.insert(25);
+    rbt.insert(37);
     rbt.printTree();
 
     rbt.deleteNode(18);
     rbt.deleteNode(25);
     rbt.deleteNode(15);
+    rbt.deleteNode(6);
+    rbt.deleteNode(13);
     rbt.printTree();
 }
 
