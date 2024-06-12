@@ -34,7 +34,7 @@ public:
 		root = new Node(v, Color::BLACK);
 		Nil = new Node();
 		Nil->color = Color::BLACK;
-		size++;
+		size = 1;
 	}
 
 	// 查找某节点,返回该节点的指针
@@ -335,22 +335,30 @@ public:
 				// 兄弟结点是黑色,兄弟至少有一个红孩子
 				else
 				{
+					bool isRL = false;
 					// 兄弟结点右孩子是黑的，所以左孩子一定是红的
 					if(getColor(sibling->right) == Color::BLACK)
-					{
-						// RL类型：只要涉及旋转，都要变色
-						// !
-						setColor(sibling->left, Color::BLACK);
-            			setColor(sibling, Color::RED);
+					{	
+						isRL = true;
+						// RL变色规则
+						if(isRL)
+						{
+							setColor(sibling->left, getColor(node->parent));
+							setColor(node->parent, Color::BLACK);
+						}
 						// 兄弟结点右旋
 						rightRotate(sibling);
 						// 旋转后更正兄弟结点指向
 						sibling = node->parent->right;
 					}
 					// RR类型
-					setColor(sibling->right, getColor(sibling));
-					setColor(sibling, getColor(node->parent));
-					setColor(node->parent, Color::BLACK);
+					// RR变色规则，跟RL类型不同
+					if(!isRL)
+					{
+						setColor(sibling->right, getColor(sibling));
+						setColor(sibling, getColor(node->parent));
+						setColor(node->parent, Color::BLACK);
+					}
 					// 左旋结点
 					leftRotate(node->parent);
 					node = root;
@@ -389,21 +397,30 @@ public:
 				// 兄弟结点是黑色,兄弟至少有一个红孩子
 				else
 				{
+					bool isLR = false;
 					// 结点左孩子是黑的，所以右孩子一定是红的
 					if(getColor(sibling->left) == Color::BLACK)
 					{
-						// LR类型
-						setColor(sibling->right, Color::BLACK);
-            			setColor(sibling, Color::RED);
+						isLR = true;
+						// LR类型变色规则
+						if(isLR)
+						{
+							setColor(sibling->right, getColor(node->parent));
+							setColor(node->parent, Color::BLACK);
+						}
+
 						// 兄弟结点左旋
 						leftRotate(sibling);
 						// 旋转后更正兄弟结点
 						sibling = node->parent->left;
 					}
 					// LL类型
-					setColor(sibling->left, getColor(sibling));
-					setColor(sibling, getColor(node->parent));
-					setColor(node->parent, Color::BLACK);
+					if(!isLR)
+					{
+						setColor(sibling->left, getColor(sibling));
+						setColor(sibling, getColor(node->parent));
+						setColor(node->parent, Color::BLACK);
+					}
 					// 右旋结点
 					rightRotate(node->parent);
 					node = root;
@@ -416,15 +433,20 @@ public:
 	// 取消Nil哨兵的连接
 	void dieConnectNil() 
 	{
-		if (Nil == nullptr) {
-		return;
+		if (Nil == nullptr) 
+		{
+			return;
 		}
-		if (Nil->parent != nullptr) {
-		if (Nil == Nil->parent->left) {
-			Nil->parent->left = nullptr;
-		} else {
-			Nil->parent->right = nullptr;
-		}
+		if (Nil->parent != nullptr) 
+		{
+			if (Nil == Nil->parent->left) 
+			{
+				Nil->parent->left = nullptr;
+			} 
+			else 
+			{
+				Nil->parent->right = nullptr;
+			}
 		}
 	}
 
@@ -432,6 +454,7 @@ public:
 	void deleteValue(Value v)
 	{
 		deleteNode(lookUp(v));
+		size--;
 	}
 
 	// 删除指定结点
@@ -571,7 +594,6 @@ public:
 			}
 		}
 		delete del;
-		
 	}
 
 	// 寻找以某个节点为根节点的右子树中的最小节点, cur是删除结点的右子树
@@ -616,8 +638,6 @@ public:
 		inorderTraversal(root);
 		std::cout << std::endl;
 	}
-
-
 
 };
 
