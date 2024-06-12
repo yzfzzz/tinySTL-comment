@@ -27,10 +27,13 @@ public:
 
 	Node* root;		// 根节点
 	size_t size;	// 树的大小
+	Node* Nil;
 
 	RedBlackTree(const Value& v)
 	{
 		root = new Node(v, Color::BLACK);
+		Nil = new Node();
+		Nil->color = Color::BLACK;
 		size++;
 	}
 
@@ -290,13 +293,16 @@ public:
 		}
 	}
 
-	// 删除后修复红黑树，保持红黑树的性质
+	// 删除后修复红黑树，保持红黑树的性质, node是双黑结点
 	void removeFixup(Node* node)
 	{
+		// 此时node是唯一一个结点
+		if(node == Nil && node->parent == nullptr)
+			return;
 		// 如果没有移到根结点，就一直循环
 		while(node != root)
 		{
-			// 结点是左子树
+			// 删除结点是左子树,兄弟结点是右子树
 			if(node == node->parent->left)
 			{
 				Node* sibling = node->parent->right;
@@ -332,13 +338,13 @@ public:
 					// 兄弟结点右孩子是黑的，所以左孩子一定是红的
 					if(getColor(sibling->right) == Color::BLACK)
 					{
-						// RL类型
-						// ! 变色
+						// RL类型：只要涉及旋转，都要变色
+						// !
 						setColor(sibling->left, Color::BLACK);
             			setColor(sibling, Color::RED);
 						// 兄弟结点右旋
 						rightRotate(sibling);
-						// 旋转后更正兄弟结点
+						// 旋转后更正兄弟结点指向
 						sibling = node->parent->right;
 					}
 					// RR类型
@@ -350,7 +356,7 @@ public:
 					node = root;
 				}
 			}
-			// 删除结点是右子树
+			// 删除结点是右子树,兄弟结点是左子树
 			else
 			{
 				Node* sibling = node->parent->left;
@@ -387,7 +393,6 @@ public:
 					if(getColor(sibling->left) == Color::BLACK)
 					{
 						// LR类型
-						// ! 变色
 						setColor(sibling->right, Color::BLACK);
             			setColor(sibling, Color::RED);
 						// 兄弟结点左旋
@@ -405,13 +410,168 @@ public:
 				}
 			}
 		}
+		setColor(node, Color::BLACK);
+	}
+
+	// 取消Nil哨兵的连接
+	void dieConnectNil() 
+	{
+		if (Nil == nullptr) {
+		return;
+		}
+		if (Nil->parent != nullptr) {
+		if (Nil == Nil->parent->left) {
+			Nil->parent->left = nullptr;
+		} else {
+			Nil->parent->right = nullptr;
+		}
+		}
+	}
+
+	// 删除数值
+	void deleteValue(Value v)
+	{
+		deleteNode(lookUp(v));
 	}
 
 	// 删除指定结点
-	void deleteNode(Value v)
+	void deleteNode(Node* del)
 	{
-		Node* cur = lookUp(v);
-		deleteFixup(cur);
+		Node* rep = del;				// rep（替代节点）初始指向要删除的节点
+		Node* child = nullptr;			// 要删除结点的孩子结点
+		Node* parentRP;					// 替代结点的父节点
+		Color origCol = rep->color;		// 要删除结点的原始结点
+
+		// 如果删除结点没有左孩子
+		if(!del->left)
+		{
+			rep = del->right;
+			parentRP = del->parent;
+			origCol = getColor(rep);
+			replaceNode(del, rep);
+		}
+		// 如果删除结点没有右孩子
+		else if(!del->right)
+		{
+			rep = del->left;
+			parentRP = del->parent;
+			origCol = getColor(rep);
+			replaceNode(del, rep);
+		}
+		// 如果删除结点有两个孩子
+		else
+		{
+			rep = findMinNode(del->right);
+			origCol = rep->color;
+			// 如果替代结点不是删除结点的直接右孩子
+			if(rep != del->right)
+			{
+				parentRP = rep->parent;
+				child = rep->right;	//rep已经是这棵子树最小的，不会有左子树
+				parentRP->left = child;	// 让父结点直接连要删除结点的子树
+				// 改孩子结点的指向
+				if(child != nullptr)
+				{
+					child->parent = parentRP;
+					setColor(child, getColor(parentRP->right));
+				}
+				// 将替代结点放在删除结点上,改左右孩子的指向
+				del->left->parent = rep;
+				del->right->parent = rep;
+				rep->left = del->left;
+				rep->right = del->right;
+				// 如果删除节点有父节点，更新父节点的孩子指向
+				if(del->parent != nullptr)
+				{
+					if(del == del->parent->left)
+					{
+						del->parent->left = rep;
+						rep->parent = del->parent;
+					}
+					else
+					{
+						del->parent->right = rep;
+						rep->parent = del->parent;
+					}
+				}
+				// 如果删除节点没有父节点，说明它是根节点
+				else
+				{
+					root = rep;
+					root->parent = nullptr;
+				}
+			}
+			// 如果替代节点是删除节点的直接右孩子,说明替代节点没有左孩子
+			else
+			{
+				child = rep->right; // 孩子节点指向替代节点的右孩子
+				rep->left = del->left; // 替代节点的左孩子指向删除节点的左孩子
+				del->left->parent = rep; // 更新左孩子的父节点
+				// 更新删除节点父节点的孩子指向
+				if (del->parent != nullptr) 
+				{
+					if (del == del->parent->left) 
+					{
+						del->parent->left = rep;
+						rep->parent = del->parent;
+					} 
+					else
+					{
+						del->parent->right = rep;
+						rep->parent = del->parent;
+					}
+				}
+				// 如果删除节点是根节点
+				else 
+				{
+					root = rep;
+					root->parent = nullptr;
+				}
+			}
+		}
+		// 如果替代节点存在，更新其颜色为删除节点的颜色,保持性质
+		if(rep != nullptr)
+		{
+			rep->color = del->color;
+		}
+		// 如果替代节点不存在，说明删掉就是一开始的目标结点(node)
+		else
+		{
+			origCol = del->color;	// origCol始终是真正删除结点的颜色
+		}
+
+		// 如果原始颜色是黑色，需要进行额外的修复操作，因为黑色节点的删除可能会破坏红黑树的性质
+		if(origCol == Color::BLACK)
+		{
+			// 如果删除结点没有孩子结点
+			if (child == nullptr)
+			{
+				// 假设删除的结点那个地方，有个结点
+				Nil->parent = parentRP;
+				// 如果替代节点的父节点存在，设置其对应的孩子指针为Nil节点
+				if(parentRP != nullptr)
+				{
+					if(parentRP->left == nullptr)
+					{
+						parentRP->left = Nil;
+					}
+					else
+					{
+						parentRP->right = Nil;
+					}
+				}
+				// 修复这个假结点
+				removeFixup(Nil);
+				// 断开Nil节点与树的连接
+				dieConnectNil();
+			}
+			else
+			{
+				// removeFixup(child);
+			}
+		}
+		delete del;
+		
 	}
 
 	// 寻找以某个节点为根节点的右子树中的最小节点, cur是删除结点的右子树
@@ -457,25 +617,7 @@ public:
 		std::cout << std::endl;
 	}
 
-	void clear()
-	{
-		deleteTree(root);
-	}
-	// 红黑树的析构
-	~RedBlackTree()
-	{
-		clear();
-	}
 
-private:
-	void deleteTree(Node* cur)
-	{
-		if(cur->left)
-			deleteNode(cur->left->value);
-		if(cur->right)
-			deleteNode(cur->right->value);
-		delete cur;
-	}
 
 };
 

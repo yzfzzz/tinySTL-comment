@@ -386,7 +386,8 @@ private:
         rep->left = del->left;
         rep->right = del->right;
         // 如果删除节点有父节点，更新父节点的孩子指向
-        if (del->parent != nullptr) {
+        if (del->parent != nullptr) 
+        {
           if (del == del->parent->left) {
             del->parent->left = rep;
             rep->parent = del->parent;
@@ -401,8 +402,9 @@ private:
           root->parent = nullptr;
         }
       }
-      // 如果替代节点是删除节点的直接右孩子
-      else {
+      // 如果替代节点是删除节点的直接右孩子,说明它没有左孩子
+      else 
+      {
         child = rep->right; // 孩子节点指向替代节点的右孩子
         rep->left = del->left; // 替代节点的左孩子指向删除节点的左孩子
         del->left->parent = rep; // 更新左孩子的父节点
@@ -424,8 +426,7 @@ private:
         parentRP = rep; // 更新替代节点的父节点
       }
     }
-
-    // 如果替代节点存在，更新其颜色为删除节点的颜色
+    // 如果替代节点存在，更新其颜色为删除节点的颜色,保持性质
     if (rep != nullptr) {
       rep->color = del->color;
     }
@@ -442,6 +443,7 @@ private:
       }
       // 如果不存在孩子节点，将Nil节点（代表空节点）的父节点设置为替代节点的父节点
       else {
+        // 用于没有孩子的结点
         Nil->parent = parentRP;
         // 如果替代节点的父节点存在，设置其对应的孩子指针为Nil节点
         if (parentRP != nullptr) {

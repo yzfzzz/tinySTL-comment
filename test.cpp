@@ -97,11 +97,18 @@ void RedBlackTree()
     rbt.insert(37);
     rbt.printTree();
 
-    rbt.deleteNode(18);
-    rbt.deleteNode(25);
-    rbt.deleteNode(15);
-    rbt.deleteNode(6);
-    rbt.deleteNode(13);
+    rbt.deleteValue(18);
+    rbt.deleteValue(25);
+    rbt.deleteValue(15);
+    rbt.deleteValue(6);
+    rbt.deleteValue(13);
+    rbt.deleteValue(37);
+    rbt.deleteValue(27);
+    rbt.deleteValue(17);
+    rbt.deleteValue(34);
+    rbt.deleteValue(9);
+    rbt.deleteValue(10);
+    rbt.deleteValue(23);
     rbt.printTree();
 }
 
