@@ -3,8 +3,37 @@
 #include "deque.h"
 #include "HashTable.h"
 #include "RedBlackTree.h"
+#include "set.h"
+
+void vectorTest();
+void listTest();
+void dequeTest();
+void HashTableTest();
+void RedBlackTree();
+void setTest();
 
 // beta≤‚ ‘∞Ê
+int main()
+{
+    // vectorTest();
+    // listTest();
+    // dequeTest();
+    // HashTableTest();
+    // RedBlackTree();
+    setTest();
+    system("pause");
+    return 0;
+}
+
+void setTest()
+{
+    mystl::set<int, int> s;
+    s.insert(10, 0);
+    s.insert(15, 0);
+    s.insert(5,0);
+    s.erase(15);
+    s.print();
+}
 
 void vectorTest()
 {
@@ -83,20 +112,20 @@ void HashTableTest()
 
 void RedBlackTree()
 {
-    mystl::RedBlackTree<int> rbt(15);
-    rbt.insert(9);
-    rbt.insert(18);
-    rbt.insert(6);
-    rbt.insert(13);
-    rbt.insert(17);
-    rbt.insert(27);
-    rbt.insert(10);
-    rbt.insert(23);
-    rbt.insert(34);
-    rbt.insert(25);
-    rbt.insert(37);
+    mystl::RedBlackTree<int, int> rbt;
+    rbt.insert(15, 0);
+    rbt.insert(9, 0);
+    rbt.insert(18, 0);
+    rbt.insert(6, 0);
+    rbt.insert(13, 0);
+    rbt.insert(17, 0);
+    rbt.insert(27, 0);
+    rbt.insert(10, 0);
+    rbt.insert(23, 0);
+    rbt.insert(34, 0);
+    rbt.insert(25, 0);
+    rbt.insert(37, 0);
     rbt.printTree();
-
     rbt.deleteValue(18);
     rbt.deleteValue(25);
     rbt.deleteValue(15);
@@ -110,15 +139,4 @@ void RedBlackTree()
     rbt.deleteValue(10);
     rbt.deleteValue(23);
     rbt.printTree();
-}
-
-int main()
-{
-    // vectorTest();
-    // listTest();
-    // dequeTest();
-    //HashTableTest();
-    RedBlackTree();
-    system("pause");
-    return 0;
 }

@@ -1,17 +1,19 @@
+#pragma once
 #include <iostream>
 #include <sstream>
 #include <string>
 
-enum class Color{RED, BLACK, DoubleBLACK};
+enum class Color{RED, BLACK};
 namespace mystl
 {
 
-template <class Value> 
+template <class Key, class Value> 
 class RedBlackTree{
 public:
 	class Node
 	{
 	public:
+		Key key;		// 键值
 		Value value;	// 数值
 		Color color;	// 颜色
 		Node* left;		// 左孩子
@@ -19,35 +21,39 @@ public:
 		Node* parent;	// 父节点
 
 		// 有参构造
-		Node(const Value& v, Color& c, Node* p = nullptr):value(v),color(c),left(nullptr),right(nullptr),parent(p){}
-		Node(const Value& v, Color c = Color::RED, Node* p = nullptr):value(v),color(c),left(nullptr),right(nullptr),parent(p){}
+		Node(const Key& k,const Value& v, Color& c, Node* p = nullptr):key(k),color(c),value(v), left(nullptr),right(nullptr),parent(p){}
+		Node(const Key& k, Value v = NULL, Color c = Color::RED, Node* p = nullptr):key(k),color(c),value(v), left(nullptr),right(nullptr),parent(p){}
 		// 默认构造:
 		Node():color(Color::RED),left(nullptr),right(nullptr),parent(nullptr){}
 	};
 
 	Node* root;		// 根节点
 	size_t size;	// 树的大小
-	Node* Nil;
+	Node* Nil;		// 删除结点后，修复红黑树的哨兵结点
 
-	RedBlackTree(const Value& v)
+	RedBlackTree() : root(nullptr), size(0), Nil(new Node()) 
 	{
-		root = new Node(v, Color::BLACK);
+    	Nil->color = Color::BLACK;
+    }
+	RedBlackTree(const Key& k, const Value& v)
+	{
+		root = new Node(k,v, Color::BLACK);
 		Nil = new Node();
 		Nil->color = Color::BLACK;
 		size = 1;
 	}
 
 	// 查找某节点,返回该节点的指针
-	Node* lookUp(Value v)
+	Node* lookUp(Key k)
 	{
 		Node* cur = root;
 		while(cur != nullptr)
 		{
-			if(v < cur->value)
+			if(k < cur->key)
 			{
 				cur = cur->left;
 			}
-			else if(v > cur->value)
+			else if(k > cur->key)
 			{
 				cur = cur->right;
 			}
@@ -135,6 +141,7 @@ public:
 
 		return r_son;
 	}
+	
 	/*
 		    O
 		   /
@@ -215,32 +222,38 @@ public:
 		}
 	}
 
-	void insert(Value v)
+	void insert(Key k, Value v)
 	{
-		Node* node = new Node(v);
+		Node* node = new Node(k, v);
 		Node* p = nullptr;
 		Node* cur = root;
+		if(this->size == 0)
+		{
+			root = node;
+			size++;
+			return;
+		}
 
 		while(cur)
 		{
 			p = cur;
-			if(v > cur->value)
+			if(k > cur->key)
 			{
 				cur = cur->right;
 			}
-			else if(v < cur->value)
+			else if(k < cur->key)
 			{
 				cur = cur->left;
 			}
 			else
 			{
-				std::cout << "the value was in the tree" << std::endl;
+				std::cout << "the key was in the tree" << std::endl;
 				delete node;
         		return;
 			}
 		}
 		size++;
-		if(v > p->value)
+		if(k > p->key)
 		{
 			p->right = node;
 		}
@@ -263,7 +276,7 @@ public:
 		if(node)
 		{
 			inorderTraversal(node->left);
-			std::cout << node->value << std::endl;
+			std::cout << node->key << std::endl;
 			inorderTraversal(node->right);
 		}
 	}
@@ -451,9 +464,9 @@ public:
 	}
 
 	// 删除数值
-	void deleteValue(Value v)
+	void deleteValue(Key k)
 	{
-		deleteNode(lookUp(v));
+		deleteNode(lookUp(k));
 		size--;
 	}
 
@@ -555,7 +568,7 @@ public:
 		// 如果替代节点存在，更新其颜色为删除节点的颜色,保持性质
 		if(rep != nullptr)
 		{
-			rep->color = del->color;
+			rep->color = del->color;	// 保持删除结点那个位置（实际上已经是rep结点了）的颜色不变
 		}
 		// 如果替代节点不存在，说明删掉就是一开始的目标结点(node)
 		else
@@ -587,10 +600,6 @@ public:
 				removeFixup(Nil);
 				// 断开Nil节点与树的连接
 				dieConnectNil();
-			}
-			else
-			{
-				// removeFixup(child);
 			}
 		}
 		delete del;
