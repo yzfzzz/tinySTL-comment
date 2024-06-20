@@ -15,7 +15,7 @@ public:
 
     void erase(Key k)
     {
-        rbt.deleteValue(k);
+        rbt.deleteKey(k);
     }
 
     size_t size()

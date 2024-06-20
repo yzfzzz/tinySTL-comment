@@ -4,13 +4,16 @@
 #include "HashTable.h"
 #include "RedBlackTree.h"
 #include "set.h"
-
+#include "unordered_set.h"
+#include "mutiset.h"
 void vectorTest();
 void listTest();
 void dequeTest();
 void HashTableTest();
 void RedBlackTree();
 void setTest();
+void unordered_set_Test();
+void mutisetTest();
 
 // beta≤‚ ‘∞Ê
 int main()
@@ -20,9 +23,32 @@ int main()
     // dequeTest();
     // HashTableTest();
     // RedBlackTree();
-    setTest();
+    // setTest();
+    // unordered_set_Test();
+    // mutisetTest();
     system("pause");
     return 0;
+}
+
+void mutisetTest()
+{
+    mystl::mutiset<int> ms;
+    ms.insert(10);
+    ms.insert(15);
+    ms.insert(15);
+    ms.insert(5);
+    ms.erase(15);
+    ms.print();
+}
+
+void unordered_set_Test()
+{
+    mystl::unordered_set<int, int> us;
+    us.insert(10);
+    us.insert(15);
+    us.insert(5);
+    us.erase(15);
+    us.print();
 }
 
 void setTest()
@@ -126,17 +152,17 @@ void RedBlackTree()
     rbt.insert(25, 0);
     rbt.insert(37, 0);
     rbt.printTree();
-    rbt.deleteValue(18);
-    rbt.deleteValue(25);
-    rbt.deleteValue(15);
-    rbt.deleteValue(6);
-    rbt.deleteValue(13);
-    rbt.deleteValue(37);
-    rbt.deleteValue(27);
-    rbt.deleteValue(17);
-    rbt.deleteValue(34);
-    rbt.deleteValue(9);
-    rbt.deleteValue(10);
-    rbt.deleteValue(23);
+    rbt.deleteKey(18);
+    rbt.deleteKey(25);
+    rbt.deleteKey(15);
+    rbt.deleteKey(6);
+    rbt.deleteKey(13);
+    rbt.deleteKey(37);
+    rbt.deleteKey(27);
+    rbt.deleteKey(17);
+    rbt.deleteKey(34);
+    rbt.deleteKey(9);
+    rbt.deleteKey(10);
+    rbt.deleteKey(23);
     rbt.printTree();
 }

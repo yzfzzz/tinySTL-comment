@@ -464,7 +464,7 @@ public:
 	}
 
 	// 删除数值
-	void deleteValue(Key k)
+	void deleteKey(Key k)
 	{
 		deleteNode(lookUp(k));
 		size--;
@@ -647,6 +647,16 @@ public:
 		inorderTraversal(root);
 		std::cout << std::endl;
 	}
+
+	// 找目标键值的地址
+	Value *at(const Key &key) {
+		auto ans = lookUp(key);
+		if (ans != nullptr) 
+		{
+			return &ans->value;
+		}
+		return nullptr;
+  	}
 
 };
 
