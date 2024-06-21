@@ -179,8 +179,14 @@ public:
 
     bool empty()
     {
-        // 类型强转：size为0是false, 否则为true
-        return size;
+        if(size == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     void clear()

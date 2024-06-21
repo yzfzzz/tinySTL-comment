@@ -9,6 +9,7 @@
 #include "mutiset.h"
 #include "map.h"
 #include "unordered_map.h"
+#include "mutimap.h"
 void vectorTest();
 void listTest();
 void dequeTest();
@@ -19,8 +20,9 @@ void unordered_set_Test();
 void mutisetTest();
 void mapTest();
 void unordered_map_Test();
+void mutimapTest();
 
-// beta≤‚ ‘∞Ê
+// beta≤‚ ‘
 int main()
 {
     // vectorTest();
@@ -32,9 +34,21 @@ int main()
     // unordered_set_Test();
     // mutisetTest();
     // mapTest();
-    unordered_map_Test();
+    // unordered_map_Test();
+    mutimapTest();
     // system("pause");
     return 0;
+}
+
+void mutimapTest()
+{
+    mystl::mutimap<std::string, int> mm;
+    mm.insert("apple",10);
+    mm.insert("apple",10);
+    mm.insert("orange", 20);
+    mm.insert("water",30);
+    mm.remove("apple", 10);
+    mm.remove("apple");
 }
 
 void unordered_map_Test()
