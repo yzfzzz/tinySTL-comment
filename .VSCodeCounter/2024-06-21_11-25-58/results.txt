@@ -1,0 +1,52 @@
+Date : 2024-06-21 11:25:58
+Directory : d:\C++\tinySTL-comment
+Total : 19 files,  3526 codes, 316 comments, 569 blanks, all 4411 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         13 |      1,889 |        316 |        212 |      2,417 |
+| Markdown |          5 |      1,352 |          0 |        357 |      1,709 |
+| Draw.io  |          1 |        285 |          0 |          0 |        285 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                   | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                      |         19 |      3,526 |        316 |        569 |      4,411 |
+| . (Files)                                              |         10 |      1,359 |        211 |        144 |      1,714 |
+| note                                                   |          9 |      2,167 |        105 |        425 |      2,697 |
+| note (Files)                                           |          5 |      1,352 |          0 |        357 |      1,709 |
+| note\map                                               |          1 |         13 |          5 |          1 |         19 |
+| note\moveSeg                                           |          1 |         74 |         11 |         11 |         96 |
+| note\pic                                               |          1 |        285 |          0 |          0 |        285 |
+| note\rbtree_refer                                      |          1 |        443 |         89 |         56 |        588 |
++--------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                               | language | code       | comment    | blank      | total      |
++--------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\C++\tinySTL-comment\HashTable.h                     | C++      |        112 |         18 |         15 |        145 |
+| d:\C++\tinySTL-comment\RedBlackTree.h                  | C++      |        514 |        109 |         40 |        663 |
+| d:\C++\tinySTL-comment\deque.h                         | C++      |        108 |          0 |         19 |        127 |
+| d:\C++\tinySTL-comment\list.h                          | C++      |        186 |         14 |         20 |        220 |
+| d:\C++\tinySTL-comment\map.h                           | C++      |         46 |          0 |          9 |         55 |
+| d:\C++\tinySTL-comment\mutiset.h                       | C++      |         54 |          4 |          9 |         67 |
+| d:\C++\tinySTL-comment\note\deque容器.md                 | Markdown |        321 |          0 |         93 |        414 |
+| d:\C++\tinySTL-comment\note\doc.md                     | Markdown |          1 |          0 |          0 |          1 |
+| d:\C++\tinySTL-comment\note\map\test.cpp               | C++      |         13 |          5 |          1 |         19 |
+| d:\C++\tinySTL-comment\note\moveSeg\const_left_ref.cpp | C++      |         74 |         11 |         11 |         96 |
+| d:\C++\tinySTL-comment\note\pic\rhtree..drawio         | Draw.io  |        285 |          0 |          0 |        285 |
+| d:\C++\tinySTL-comment\note\rbtree_refer\rbtree.cpp    | C++      |        443 |         89 |         56 |        588 |
+| d:\C++\tinySTL-comment\note\vector容器.md                | Markdown |        336 |          0 |         78 |        414 |
+| d:\C++\tinySTL-comment\note\哈希表.md                     | Markdown |        462 |          0 |        125 |        587 |
+| d:\C++\tinySTL-comment\note\红黑树.md                     | Markdown |        232 |          0 |         61 |        293 |
+| d:\C++\tinySTL-comment\set.h                           | C++      |         29 |          0 |          8 |         37 |
+| d:\C++\tinySTL-comment\test.cpp                        | C++      |        165 |         10 |         10 |        185 |
+| d:\C++\tinySTL-comment\unordered_set.h                 | C++      |         19 |          1 |          8 |         28 |
+| d:\C++\tinySTL-comment\vector.h                        | C++      |        126 |         55 |          6 |        187 |
+| Total                                                  |          |      3,526 |        316 |        569 |      4,411 |
++--------------------------------------------------------+----------+------------+------------+------------+------------+

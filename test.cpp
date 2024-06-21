@@ -1,3 +1,4 @@
+#include <string>
 #include "vector.h"
 #include "list.h"
 #include "deque.h"
@@ -6,6 +7,8 @@
 #include "set.h"
 #include "unordered_set.h"
 #include "mutiset.h"
+#include "map.h"
+#include "unordered_map.h"
 void vectorTest();
 void listTest();
 void dequeTest();
@@ -14,6 +17,8 @@ void RedBlackTree();
 void setTest();
 void unordered_set_Test();
 void mutisetTest();
+void mapTest();
+void unordered_map_Test();
 
 // beta≤‚ ‘∞Ê
 int main()
@@ -26,8 +31,33 @@ int main()
     // setTest();
     // unordered_set_Test();
     // mutisetTest();
-    system("pause");
+    // mapTest();
+    unordered_map_Test();
+    // system("pause");
     return 0;
+}
+
+void unordered_map_Test()
+{
+    mystl::unordered_map<int, std::string> um;
+    um.insert(10,"Apple");
+    um.insert(15,"Lemon");
+    um.insert(5,"Orange");
+    um.erase(15);
+    um.insert(15,"Lemon");
+}
+
+void mapTest()
+{
+    mystl::map<int, std::string> m;
+    m.insert(1,"Apple");
+    m.insert(2,"Benana");
+    m.insert(3,"Orange");
+    m.insert(4,"Lemon");
+    m.insert(5,"Peach");
+    auto v = m[2];
+    m.remove(2);
+    m.remove(1);
 }
 
 void mutisetTest()
