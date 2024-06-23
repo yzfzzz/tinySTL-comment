@@ -10,6 +10,10 @@
 #include "map.h"
 #include "unordered_map.h"
 #include "mutimap.h"
+#include "stack.h"
+#include "queue.h"
+#include "priority_queue.h"
+
 void vectorTest();
 void listTest();
 void dequeTest();
@@ -21,6 +25,9 @@ void mutisetTest();
 void mapTest();
 void unordered_map_Test();
 void mutimapTest();
+void stackTest();
+void queueTest();
+void priority_queueTest();
 
 // beta≤‚ ‘
 int main()
@@ -35,9 +42,59 @@ int main()
     // mutisetTest();
     // mapTest();
     // unordered_map_Test();
-    mutimapTest();
-    // system("pause");
+    // mutimapTest();
+    // stackTest();
+    // queueTest();
+    priority_queueTest();
+    system("pause");
     return 0;
+}
+
+void priority_queueTest()
+{
+    mystl::priority_queue<int> pq;
+    for(int i =0; i < 5; i++)
+    {
+        pq.push(i);
+    }
+    int a = pq.top();
+    int b = pq.top();
+    for(int i = 0; i< 2; i++)
+    {
+        pq.pop();
+    }
+    int c = pq.top();
+}
+
+void queueTest()
+{
+    mystl::queue<int> qt;
+    for(int i =0; i < 5; i++)
+    {
+        qt.push(i);
+    }
+    int a = qt.back();
+    int b = qt.front();
+    for(int i = 0; i< 2; i++)
+    {
+        qt.pop();
+    }
+    int c = qt.front();
+}
+
+void stackTest()
+{
+    mystl::stack<int> st;
+    for(int i = 0; i < 5; i++)
+    {
+        st.push(i);
+    }
+    int a = st.top();
+    for(int i = 0; i < 3; i++)
+    {
+        st.pop();
+    }
+    int b = st.top();
 }
 
 void mutimapTest()
