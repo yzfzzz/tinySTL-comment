@@ -14,34 +14,35 @@ public:
     void heapFixDown()
     {
         int index = 0;
+        int largeIndex = index;
+        int size = data.getSize();
         while(1)
         {
-            int lastIndex = index;
-            int size = data.getSize();
-            while(1)
+            int leftSon = 2*index + 1;
+            int rightSon = 2*index + 2;
+            if(leftSon < size && rightSon < size)
             {
-                int leftSon = 2*index + 1;
-                int rightSon = 2*index + 2;
+                (data[leftSon] < data[rightSon])? (largeIndex = leftSon) : (largeIndex = rightSon);
+            }
+            // 右孩子越界了
+            else if(leftSon < size)
+            {
+                if(data[leftSon] < data[index])
+                {
+                    largeIndex = leftSon;
+                }
+            }
 
-                if(leftSon < size && data[leftSon] > data[index])
-                {
-                    lastIndex = index;
-                }
-                if(rightSon < size && data[rightSon] > data[index])
-                {
-                    lastIndex = index;
-                }
-
-                if(lastIndex != index)
-                {
-                    std::swap(data[lastIndex], data[index]);
-                    index = lastIndex;
-                }
-                else{
-                    break;
-                }
-            } 
-        }
+            if(largeIndex != index)
+            {
+                std::swap(data[largeIndex], data[index]);
+                index = largeIndex;
+            }
+            else
+            {
+                break;
+            }
+        } 
     }
 
     // 自下而上堆维护(向上)
@@ -74,6 +75,7 @@ public:
     {
         if(!this->empty())
         {
+            // 在堆中，删除操作通常指的是删除根节点，即最大元素或最小元素
             std::swap(data[0], data[data.getSize() - 1]);
             data.pop_back();
             heapFixDown();

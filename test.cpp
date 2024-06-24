@@ -45,7 +45,7 @@ int main()
     // mutimapTest();
     // stackTest();
     // queueTest();
-    priority_queueTest();
+    // priority_queueTest();
     system("pause");
     return 0;
 }
@@ -58,12 +58,12 @@ void priority_queueTest()
         pq.push(i);
     }
     int a = pq.top();
-    int b = pq.top();
+    int b;
     for(int i = 0; i< 2; i++)
     {
         pq.pop();
     }
-    int c = pq.top();
+    int c= pq.top();
 }
 
 void queueTest()
