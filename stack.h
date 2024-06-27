@@ -5,6 +5,7 @@ namespace mystl{
 template <class T, class Container = deque<T>>
 class stack{
 public:
+    // stack的底层用的是双端数组
     Container data;
 
     void pop()

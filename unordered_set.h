@@ -5,6 +5,7 @@ namespace mystl{
 template <class Key, class Value>
 class unordered_set{
 public:
+    // unordered_set的底层实现是基于哈希表的
     HashTable<Key, Value> hashtable;
     // 该关键字告诉编译器，函数中不会发生异常,这有利于编译器对程序做更多的优化
     bool empty() const noexcept { return hashtable.size() == 0; }

@@ -6,6 +6,7 @@ namespace mystl{
 template <class Key, class Value>
 class map{
 public:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
     mystl::RedBlackTree<Key, Value> rbt;
 
     void insert(const Key k, const Value v)

@@ -565,6 +565,7 @@ public:
 				}
 			}
 		}
+
 		// 如果替代节点存在，更新其颜色为删除节点的颜色,保持性质
 		if(rep != nullptr)
 		{
@@ -575,7 +576,6 @@ public:
 		{
 			origCol = del->color;	// origCol始终是真正删除结点的颜色
 		}
-
 		// 如果原始颜色是黑色，需要进行额外的修复操作，因为黑色节点的删除可能会破坏红黑树的性质
 		if(origCol == Color::BLACK)
 		{
@@ -648,7 +648,7 @@ public:
 		std::cout << std::endl;
 	}
 
-	// 找目标键值的地址
+	// 找目标Value的地址
 	Value *at(const Key &key) {
 		auto ans = lookUp(key);
 		if (ans != nullptr) 
