@@ -100,6 +100,13 @@ public:
         }
         std::cout << std::endl;
     }
+
+    bool empty()
+    {
+        if(size > 0)
+            return false;
+        return true;
+    }
     
 
 
